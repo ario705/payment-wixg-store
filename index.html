@@ -14,7 +14,6 @@
       --muted: rgba(255,255,255,.72);
       --shadow: 0 18px 60px rgba(0,0,0,.55);
       --radius: 26px;
-
       --glow1: rgba(120,120,255,.35);
       --glow2: rgba(140,70,255,.22);
       --accent: rgba(120,140,255,.85);
@@ -30,7 +29,7 @@
       overflow-x:hidden;
     }
 
-    /* Background */
+    /* Background image + blur layer */
     .bg{
       position:fixed; inset:0;
       background:
@@ -46,6 +45,18 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       background: rgba(0,0,0,.18);
+    }
+
+    /* Shooting stars canvas */
+    #stars{
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .55;
+      mix-blend-mode: screen;
     }
 
     .wrap{
@@ -67,6 +78,12 @@
         0 0 45px var(--glow2);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      animation: floatCard 6s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
     }
 
     .title{
@@ -77,25 +94,50 @@
       margin: 8px 0 14px;
     }
 
+    /* Header frame + glow */
     .hero{
       width:100%;
-      padding: 14px;                 /* ruang atas & bawah */
+      padding: 16px;
       border-radius: 22px;
+      overflow:hidden;
       background:
-      radial-gradient(120% 80% at 50% 0%, rgba(140,90,255,.35), transparent 60%),
-      linear-gradient(180deg, rgba(20,15,60,.9), rgba(8,8,25,.95));
+        radial-gradient(120% 80% at 50% 0%, rgba(140,90,255,.45), transparent 62%),
+        linear-gradient(180deg, rgba(20,15,60,.95), rgba(8,8,25,.98));
       box-shadow:
-      0 20px 60px rgba(0,0,0,.6),
-      0 0 45px rgba(140,90,255,.25);
+        0 20px 60px rgba(0,0,0,.65),
+        0 0 65px rgba(140,90,255,.35);
+      animation: headerBreath 5s ease-in-out infinite;
     }
+
+    @keyframes headerBreath {
+      0%,100% {
+        box-shadow:
+          0 20px 60px rgba(0,0,0,.6),
+          0 0 45px rgba(140,90,255,.30);
+        transform: translateY(0);
+      }
+      50% {
+        box-shadow:
+          0 24px 70px rgba(0,0,0,.65),
+          0 0 70px rgba(140,90,255,.45);
+        transform: translateY(-2px);
+      }
+    }
+
     .hero img{
       width:100%;
-      height: 220px;
+      height: 190px;
       object-fit: cover;
+      object-position: center 35%;
       border-radius: 16px;
       display:block;
-      box-shadow:
-      0 0 25px rgba(140,90,255,.35);
+      box-shadow: 0 0 30px rgba(140,90,255,.40);
+      animation: slowZoom 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
     }
 
     /* QRIS button */
@@ -119,10 +161,17 @@
       box-shadow:
         0 12px 34px rgba(0,0,0,.28),
         0 0 28px rgba(120,120,255,.16);
-      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
+      transition: transform .12s ease, border-color .12s ease, filter .12s ease, box-shadow .3s ease;
     }
     .btn:active{ transform: scale(.99); }
-    .btn:hover{ border-color: rgba(255,255,255,.18); filter:saturate(1.05); }
+    .btn:hover{
+      border-color: rgba(255,255,255,.18);
+      filter:saturate(1.05);
+      box-shadow:
+        0 0 35px rgba(140,90,255,.45),
+        0 15px 40px rgba(0,0,0,.4);
+      transform: translateY(-1px);
+    }
 
     .icon{ width:20px; height:20px; fill: rgba(255,255,255,.88); }
 
@@ -148,7 +197,15 @@
         0 0 0 1px rgba(255,255,255,.09) inset;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      animation: popIn .6s ease both;
     }
+    @keyframes popIn{
+      from{opacity:0; transform: translateY(10px) scale(.98);}
+      to{opacity:1; transform:none;}
+    }
+    .item:nth-child(1){ animation-delay: .10s; }
+    .item:nth-child(2){ animation-delay: .20s; }
+    .item:nth-child(3){ animation-delay: .30s; }
 
     .left{
       display:flex;
@@ -235,6 +292,9 @@
       font-size: 14px;
       letter-spacing:.2px;
       opacity:.92;
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
 
     .playBtn{
@@ -290,27 +350,27 @@
     }
 
     .eq{
-      margin-top: 12px;
+      margin-top: 14px;
       display:flex;
-      gap:8px;
+      gap:10px;
       align-items:flex-end;
-      height: 68px;
-      padding: 10px 12px;
-      border-radius: 18px;
+      height: 68px;         /* bigger */
+      padding: 12px 14px;
+      border-radius: 20px;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.05);
     }
 
     .eq span{
       flex:1;
-      height: 14px;
-      border-radius: 10px 10px 6px 6px;
+      height: 18px;
+      border-radius: 12px 12px 7px 7px;
       background: rgba(120,140,255,.75);
       transition: height .12s ease;
     }
 
     .eq.paused span{
-      height: 18px !important; /* 🔥 */
+      height: 18px !important;
       opacity:.7;
     }
   </style>
@@ -318,9 +378,11 @@
 
 <body>
   <div class="bg"></div>
+  <canvas id="stars"></canvas>
 
   <div class="wrap">
     <main class="card">
+      <!-- EDIT JUDUL DI SINI -->
       <div class="title">Wixg Store — Payment</div>
 
       <div class="hero">
@@ -335,7 +397,7 @@
         Lihat QRIS
       </a>
 
-      <!-- Payment methods (EDIT NOMOR DI SINI) -->
+      <!-- PAYMENT LIST (EDIT NOMOR DI SINI) -->
       <section class="list">
         <div class="item">
           <div class="left">
@@ -368,7 +430,7 @@
         </div>
       </section>
 
-      <!-- Aesthetic Music Player -->
+      <!-- MUSIC PLAYER -->
       <div class="player" id="player">
         <div class="playerTop">
           <div class="playerTitle">🎵 Party of Sylend</div>
@@ -460,7 +522,7 @@
     function animateEQ(isPlaying){
       if(!isPlaying){
         eq.classList.add("paused");
-        eqBars.forEach(b => b.style.height = "12px");
+        eqBars.forEach(b => b.style.height = "18px");
         window.__eqTimer && clearInterval(window.__eqTimer);
         return;
       }
@@ -468,7 +530,7 @@
       window.__eqTimer && clearInterval(window.__eqTimer);
       window.__eqTimer = setInterval(() => {
         eqBars.forEach((b) => {
-          const h = 18 + Math.floor(Math.random()*44); // 🔥 18..62
+          const h = 18 + Math.floor(Math.random()*44); // 18..62 (bigger)
           b.style.height = h + "px";
         });
       }, 140);
@@ -511,6 +573,121 @@
 
     audioEl.addEventListener("play", ()=>{ setPlayIcon(true); animateEQ(true); });
     audioEl.addEventListener("pause", ()=>{ setPlayIcon(false); animateEQ(false); });
-  </script>
-</body>
-</html>                        
+
+    // ===== Shooting Stars (lightweight) =====
+    (() => {
+      const c = document.getElementById("stars");
+      if(!c) return;
+      const ctx = c.getContext("2d");
+
+      let W=0, H=0, dpr=1;
+      function resize(){
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        W = Math.floor(window.innerWidth);
+        H = Math.floor(window.innerHeight);
+        c.width = Math.floor(W * dpr);
+        c.height = Math.floor(H * dpr);
+        c.style.width = W + "px";
+        c.style.height = H + "px";
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      window.addEventListener("resize", resize, {passive:true});
+      resize();
+
+      const dots = Array.from({length: 70}, () => ({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: Math.random()*1.2 + 0.2,
+        a: Math.random()*0.6 + 0.15
+      }));
+
+      const shoots = [];
+      function spawnShoot(){
+        const fromLeft = Math.random() < 0.55;
+        const x = fromLeft ? -50 : Math.random()*W;
+        const y = Math.random()*H*0.45;
+        const speed = 10 + Math.random()*10;
+        const len = 120 + Math.random()*140;
+        const ang = (Math.PI * (25 + Math.random()*18)) / 180; // 25..43 deg
+        const vx = Math.cos(ang) * speed;
+        const vy = Math.sin(ang) * speed;
+        shoots.push({ x, y, vx, vy, len, life:0, maxLife: 45 + Math.floor(Math.random()*35), alpha:0 });
+      }
+
+      let nextSpawn = performance.now() + 700;
+      function scheduleNext(now){
+        nextSpawn = now + (600 + Math.random()*1400);
+      }
+
+      function drawDotStar(s){
+        ctx.globalAlpha = s.a;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function drawShoot(s){
+        const t = s.life / s.maxLife;
+        s.alpha = t < 0.2 ? (t/0.2) : (t > 0.85 ? (1 - (t-0.85)/0.15) : 1);
+        ctx.globalAlpha = 0.55 * s.alpha;
+
+        const norm = Math.hypot(s.vx, s.vy) || 1;
+        const tx = s.x - (s.vx/norm) * s.len;
+        const ty = s.y - (s.vy/norm) * s.len;
+
+        const grad = ctx.createLinearGradient(s.x, s.y, tx, ty);
+        grad.addColorStop(0, "rgba(210,200,255,0.95)");
+        grad.addColorStop(0.45, "rgba(140,120,255,0.45)");
+        grad.addColorStop(1, "rgba(140,120,255,0)");
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = "round";
+
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.75 * s.alpha;
+        ctx.fillStyle = "rgba(230,230,255,0.9)";
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 1.6, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      let last = performance.now();
+      function frame(now){
+        const dt = Math.min(32, now - last);
+        last = now;
+
+        ctx.clearRect(0,0,W,H);
+
+        ctx.fillStyle = "rgba(190,180,255,0.9)";
+        for(const d of dots){
+          d.a += (Math.random()-0.5)*0.02;
+          d.a = Math.max(0.08, Math.min(0.65, d.a));
+          drawDotStar(d);
+        }
+
+        if(now >= nextSpawn){
+          spawnShoot();
+          scheduleNext(now);
+        }
+
+        for(let i=shoots.length-1;i>=0;i--){
+          const s = shoots[i];
+          s.x += s.vx * (dt/16);
+          s.y += s.vy * (dt/16);
+          s.life++;
+          drawShoot(s);
+
+          if(s.life > s.maxLife || s.x > W+200 || s.y > H+200){
+            shoots.splice(i,1);
+          }
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      scheduleN
