@@ -1,1 +1,237 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wixg Store — Payment</title>
+  <style>
+    :root{
+      --card: rgba(18, 26, 58, .58);
+      --card2: rgba(255,255,255,.07);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.93);
+      --muted: rgba(255,255,255,.72);
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background:#050714;
+      overflow-x:hidden;
+    }
+    .bg{
+      position:fixed; inset:0;
+      background:
+        radial-gradient(900px 600px at 50% 25%, rgba(107,108,255,.22), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.75)),
+        url("bg.jpg") center/cover no-repeat;
+      z-index:-2;
+      filter:saturate(1.15);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:-30px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(0,0,0,.18);
+    }
+    .wrap{ min-height:100vh; display:flex; justify-content:center; padding:26px 14px 40px; }
+    .card{
+      width:min(420px, 100%);
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .title{ text-align:center; font-weight:900; font-size:20px; margin:6px 0 14px; }
+    .hero{
+      width:100%; aspect-ratio:16/9;
+      border-radius:18px; overflow:hidden;
+      border:1px solid var(--stroke);
+      background:#0b1030;
+    }
+    .hero img{ width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.05) saturate(1.2); }
 
+    .btn{
+      margin: 14px 0;
+      width:100%;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      color: var(--text);
+      font-weight: 900;
+      cursor:pointer;
+      user-select:none;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      transition: transform .12s ease, border-color .12s ease;
+      text-decoration:none;
+    }
+    .btn:active{ transform: scale(.99); }
+    .btn:hover{ border-color: rgba(255,255,255,.18); }
+
+    .list{ display:flex; flex-direction:column; gap:12px; margin-top:2px; }
+    .item{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .left{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+    .method{ font-weight: 950; font-size: 16px; }
+    .number{ color: var(--muted); font-size: 14px; letter-spacing:.3px; }
+
+    .copy{
+      width:44px; height:44px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      display:grid; place-items:center;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+      flex: 0 0 auto;
+    }
+    .copy:hover{ background: rgba(255,255,255,.09); }
+    .copy:active{ transform: scale(.98); }
+    .icon{ width:20px; height:20px; fill: rgba(255,255,255,.88); }
+
+    .toast{
+      position: fixed; left: 50%; bottom: 22px;
+      transform: translateX(-50%);
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .toast.show{ opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    .musicBar{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+    }
+    .musicTitle{ font-weight: 900; font-size: 13px; margin-bottom: 8px; opacity:.9; }
+    audio{ width:100%; }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <main class="card">
+      <div class="title">Wixg Store — Payment</div>
+
+      <div class="hero">
+        <img src="header.jpg" alt="Header Wixg Store" />
+      </div>
+
+      <!-- QRIS -->
+      <a class="btn" href="qris.html">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm12 0h2v2h-2v-2zm-4 0h2v2h-2v-2zm6 4h2v2h-2v-2zm-2 0h2v2h-2v-2zm-4 0h2v2h-2v-2zm6-6h2v2h-2v-2zm-2 0h2v2h-2v-2zm0 4h2v2h-2v-2z"/>
+        </svg>
+        Lihat QRIS
+      </a>
+
+      <section class="list">
+        <!-- Semua nomor sama sesuai data kamu -->
+        <div class="item">
+          <div class="left">
+            <div class="method">DANA</div>
+            <div class="number" data-copy="083185660745">083185660745</div>
+          </div>
+          <button class="copy" type="button" onclick="copyFrom(this)" aria-label="Copy DANA">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+          </button>
+        </div>
+
+        <div class="item">
+          <div class="left">
+            <div class="method">GoPay</div>
+            <div class="number" data-copy="083185660745">083185660745</div>
+          </div>
+          <button class="copy" type="button" onclick="copyFrom(this)" aria-label="Copy GoPay">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+          </button>
+        </div>
+
+        <div class="item">
+          <div class="left">
+            <div class="method">ShopeePay</div>
+            <div class="number" data-copy="083185660745">083185660745</div>
+          </div>
+          <button class="copy" type="button" onclick="copyFrom(this)" aria-label="Copy ShopeePay">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16h-9V7h9v14z"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Musik -->
+      <div class="musicBar">
+        <div class="musicTitle">🎵 Party of Sylend</div>
+        <audio id="bgm" controls preload="auto" loop>
+          <source src="party-of-sylend.mp3" type="audio/mpeg" />
+          Browser kamu tidak support audio.
+        </audio>
+        <button class="btn" type="button" style="margin:12px 0 0" onclick="startMusic()">
+          ▶️ Putar Musik
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast">Tersalin</div>
+
+  <script>
+    function showToast(text){
+      const t = document.getElementById('toast');
+      t.textContent = text || 'Tersalin';
+      t.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.classList.remove('show'), 1200);
+    }
+
+    async function copyFrom(btn){
+      const numberEl = btn.parentElement.querySelector('.number');
+      const value = numberEl?.getAttribute('data-copy') || numberEl?.textContent?.trim();
+      if(!value) return;
+
+      try{
+        await navigator.clipboard.writeText(value);
+        showToast('Nomor tersalin');
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Nomor tersalin');
+      }
+    }
+
+    function startMusic(){
+      const a = document.getElementById('bgm');
+      a.play().then(()=>showToast('Musik diputar')).catch(()=>showToast('Klik tombol play di audio'));
+    }
+  </script>
+</body>
+  </html>
