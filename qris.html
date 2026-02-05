@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wixg Store — QRIS</title>
+  <title>QRIS — Wixg Store</title>
+
   <style>
     :root{
-      --card: rgba(18, 26, 58, .58);
+      --card: rgba(18, 26, 58, .62);
       --stroke: rgba(255,255,255,.12);
       --text: rgba(255,255,255,.93);
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
-      --radius: 22px;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 26px;
+      --glow2: rgba(140,70,255,.18);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0; min-height:100vh;
@@ -20,14 +23,15 @@
       background:#050714;
       overflow-x:hidden;
     }
+
     .bg{
       position:fixed; inset:0;
       background:
-        radial-gradient(900px 600px at 50% 25%, rgba(107,108,255,.22), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.75)),
+        radial-gradient(900px 600px at 50% 22%, rgba(107,108,255,.22), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.80)),
         url("bg.jpg") center/cover no-repeat;
       z-index:-2;
-      filter:saturate(1.15);
+      filter:saturate(1.12);
     }
     .bg::after{
       content:"";
@@ -36,24 +40,42 @@
       -webkit-backdrop-filter: blur(14px);
       background: rgba(0,0,0,.18);
     }
-    .wrap{ min-height:100vh; display:flex; justify-content:center; padding:26px 14px 40px; }
+
+    .wrap{ min-height:100vh; display:flex; justify-content:center; padding:26px 14px 44px; }
+
     .card{
       width:min(420px, 100%);
+      padding: 20px;
       background: var(--card);
-      border:1px solid var(--stroke);
+      border:1px solid rgba(255,255,255,.10);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
+      box-shadow:
+        var(--shadow),
+        0 0 0 1px rgba(255,255,255,.10) inset,
+        0 0 45px var(--glow2);
       text-align:center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    .title{ font-weight:950; font-size:20px; margin:6px 0 12px; }
+
+    .title{
+      font-weight: 950;
+      font-size: 20px;
+      margin: 8px 0 14px;
+      letter-spacing:.3px;
+    }
+
     .qrisBox{
       margin-top: 10px;
-      border-radius: 18px;
-      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
-      padding: 14px;
+      padding: 16px;
+      box-shadow:
+        0 12px 34px rgba(0,0,0,.28),
+        0 0 0 1px rgba(255,255,255,.10) inset;
     }
+
     .qrisBox img{
       width:100%;
       max-width: 340px;
@@ -63,22 +85,33 @@
       margin: 0 auto;
       background:#fff;
     }
-    .hint{ margin: 12px 0 0; opacity:.85; font-size: 13px; line-height:1.4; }
+
+    .hint{
+      margin: 12px 0 0;
+      opacity:.85;
+      font-size: 13px;
+      line-height:1.4;
+    }
+
     .btn{
       margin: 14px 0 0;
       width:100%;
-      padding: 14px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      height: 54px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
       color: var(--text);
-      font-weight: 900;
+      font-weight: 950;
       cursor:pointer;
       text-decoration:none;
-      display:inline-block;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 12px 34px rgba(0,0,0,.28);
     }
   </style>
 </head>
+
 <body>
   <div class="bg"></div>
 
@@ -87,7 +120,6 @@
       <div class="title">QRIS — Wixg Store</div>
 
       <div class="qrisBox">
-        <!-- Simpan gambar QRIS kamu jadi qris.png -->
         <img src="qris.png" alt="QRIS Wixg Store">
         <div class="hint">
           Buka e-wallet / m-banking → Scan QR → arahkan ke QRIS ini.
